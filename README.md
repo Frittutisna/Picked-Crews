@@ -1,4 +1,4 @@
-# Modes Picker v1.0.0 for Picked Crews
+# Modes Picker v1.0.1 for Picked Crews
 
 ## 1. Roll Phase:
 1. Download the [Script](https://github.com/Frittutisna/Picked-Crews/blob/main/Script.py)
@@ -10,7 +10,7 @@
 5. Find `Rolls.txt` and copy-paste it in `#tour-information`
 
 ## 2. Protect Phase:
-Each team picks one mode to pick and protect for themselves. This mode cannot be banned
+Each team picks one mode to pick and protect for themselves. This mode cannot be banned by the other team
 
 ## 3. Ban Phase:
 Each team bans unprotected modes for the other team so that the number of players in the banned modes equal the number of team members

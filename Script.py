@@ -66,23 +66,35 @@ def parse_rolls():
 
 def validate_setup(setup, rolled_map):
     '''Validates constraints against Setup.txt'''
-    if len(setup["protected"]) != 2         : raise ValueError(f"Team A and B must each protect exactly 1 mode, found {len(setup['protected'])}")
+    if len(setup["protected"]) != 2: 
+        raise ValueError(f"Team A and B must each protect exactly 1 mode, found {len(setup['protected'])}")
 
     for i in range(2):
         team_label = "Team A" if i == 0 else "Team B"
         opp_label  = "Team B" if i == 0 else "Team A"
         opp_idx    = 1 - i
-        
-        total_banned = sum(rolled_map[idx]["val_c"] for idx in setup["banned"][i])
-        if total_banned != setup["size"]    : raise ValueError(f"Modes banned by {team_label} for {opp_label} total {total_banned} players, expected {setup['size']}")
 
-        total_picked = rolled_map[setup["protected"][i]]["val_c"] + sum(rolled_map[idx]["val_c"] for idx in setup["picked"][i])
-        if total_picked != setup["size"]    : raise ValueError(f"Modes protected and picked by {team_label} total {total_picked} players, expected {setup['size']}")
+        opp_protected_idx = setup["protected"][opp_idx]
+        if opp_protected_idx in setup["banned"][i]:
+            raise ValueError(f"{team_label} banned the protected {rolled_map[opp_protected_idx]['name']}")
 
         banned_by_opponent  = set(setup["banned"][opp_idx])
         team_picks          = set(setup["picked"][i])
         clashes             = team_picks & banned_by_opponent
-        if clashes                          : raise ValueError(f"{team_label} picked mode(s) banned by {opp_label}: {', '.join([rolled_map[c]['name'] for c in clashes])}")
+        if clashes:
+            raise ValueError(f"{team_label} picked mode(s) banned by {opp_label}: {', '.join([rolled_map[c]['name'] for c in clashes])}")
+
+        total_banned = sum(rolled_map[idx]["val_c"] for idx in setup["banned"][i])
+        if total_banned != setup["size"]:
+            raise ValueError(f"Modes banned by {team_label} for {opp_label} total {total_banned} players, expected {setup['size']}")
+        
+        team_protected_idx = setup["protected"][i]
+        if team_protected_idx in setup["picked"][i]:
+            raise ValueError(f"{team_label} picked the already-protected {rolled_map[team_protected_idx]['name']}")
+
+        total_picked = rolled_map[team_protected_idx]["val_c"] + sum(rolled_map[idx]["val_c"] for idx in setup["picked"][i])
+        if total_picked != setup["size"]:
+            raise ValueError(f"Modes protected/picked by {team_label} total {total_picked} players, expected {setup['size']}")
 
 def generate_results(setup, rolled_list):
     '''Generates Results.txt based on Setup.txt and Rolls.txt'''
