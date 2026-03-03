@@ -1,7 +1,7 @@
 # Modes Picker v1.0.0 for Picked Crews
 
 ## 1. Roll Phase:
-1. Download the [Script](https://github.com/Frittutisna/Picked-Crews/blob/main/Script.js)
+1. Download the [Script](https://github.com/Frittutisna/Picked-Crews/blob/main/Script.py)
 2. Find the [Spreadsheet](https://docs.google.com/spreadsheets/d/1VxqdLA3T_coSpoFXhSnaNgAk3BZ2XQ7drvNgcUf6OXQ/edit?gid=269142575#gid=269142575), then click `File > Download > Microsoft Excel (.xlsx)` in the top-left
 3. Gather both in the same folder, then open said folder in CMD/VSCode. Make sure said folder only contains the Script and the Spreadsheet
 4. Run the Script. By default, it rolls 50 modes with no minimum Sports Modes. To change this, do one of the following (the latter takes precedence):
