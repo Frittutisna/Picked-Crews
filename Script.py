@@ -55,13 +55,17 @@ def parse_rolls():
     lines   = Path("Rolls.txt").read_text(encoding = "utf-8").splitlines()
     rolled  = []
     for line in lines:
-        match = re.match(r"(\d+)\.\s+(.*)\s+\((\d+),\s+(\d+)\)", line)
-        if match: rolled.append({
-            "list_idx"  : int(match.group(1)),
-            "name"      : match.group(2).strip(), 
-            "row"       : int(match.group(3)), 
-            "val_c"     : int(match.group(4))
-        })
+        match = re.match(r"(\d+)\.\s+(.*)", line)
+        if match:
+            idx         = int(match.group(1))
+            full_name   = match.group(2).strip()
+            count_match = re.search(r"(\d+)v\d+", full_name)
+            val_c       = int(count_match.group(1)) if count_match else 1
+            rolled.append({
+                "list_idx"  : idx,
+                "name"      : full_name, 
+                "val_c"     : val_c
+            })
     return rolled
 
 def validate_setup(setup, rolled_map):
@@ -145,7 +149,7 @@ def generate_rolls(all_data, args):
         if final_needed > 0: fill_buckets([d for d in all_data if d["name"] not in get_selected_names()], final_needed)
 
     random.shuffle(selected)
-    output_lines = [f"{i}. {format_mode_name(item['name'], item['val_c'])} ({item['row']}, {item['val_c']})" for i, item in enumerate(selected, 1)]
+    output_lines = [f"{i}. {format_mode_name(item['name'], item['val_c'])}" for i, item in enumerate(selected, 1)]
     output_text  = "Rolled Modes: \n" + "\n".join(output_lines)
     
     Path("Rolls.txt").write_text(output_text, encoding = "utf-8")
@@ -159,8 +163,7 @@ def generate_results(setup, rolled_list):
     
     def get_fmt(idx): 
         mode = rolled_map[idx]
-        formatted_name = format_mode_name(mode['name'], mode['val_c'])
-        return f"{formatted_name}:"
+        return f"{mode['name']}:"
 
     rounds = []
     for i in range(2):
@@ -191,7 +194,7 @@ def generate_results(setup, rolled_list):
             ordered_sample  = [w_pick, r_pick]
             remaining       = [d for d in sample if d not in ordered_sample]
             ordered_sample.extend(remaining)
-            round_3_final   = [f"{format_mode_name(d['name'], d['val_c'])}:" for d in ordered_sample]
+            round_3_final   = [f"{d['name']}:" for d in ordered_sample]
             break
 
         attempts += 1
