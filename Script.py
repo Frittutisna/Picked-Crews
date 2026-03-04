@@ -9,7 +9,7 @@ from    pathlib     import  Path
 # Configurations
 MODE_WEIGHTS    = {"Watched": 0.25, "Random": 0.25, "Spotlight": 0.25, "Any": 0.25}
 SPORTS_MODES    = ["MLB", "NBA", "NFL", "F1"]
-DEFAULT_MODES   = 500
+DEFAULT_MODES   = 50
 DEFAULT_SPORTS  = 0
 
 # Script
