@@ -6,7 +6,7 @@
 3. Gather both in the same folder, then open said folder in CMD/VSCode. Make sure said folder only contains the Script and the Spreadsheet
 4. Run the Script. By default, it rolls 50 modes with no minimum Sports Modes. To change this, do one of the following (the latter takes precedence):
     * Edit `DEFAULT_MODES` and/or `DEFAULT_SPORTS` in the `# Configurations` section of the Script
-    * Add the flag(s) `--modes [1+]` and/or `--sports [1-4]` when running the Script (e.g., `python Script.py --modes 120 --sports 1` if you want to roll 120 modes with 1 guaranteed Sports Mode)
+    * Add the flag(s) `--modes [50-100]` and/or `--sports [1-3]` when running the Script (e.g., `python Script.py --modes 100 --sports 1` if you want to roll 100 modes with 1 guaranteed Sports Mode)
 5. Find `Rolls.txt` and copy-paste it in `#tour-information`
 
 ## 2. Protect Phase:
