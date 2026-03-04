@@ -1,4 +1,4 @@
-# Modes Picker v1.0.1 for Picked Crews
+# Modes Picker v1.0.2 for Picked Crews
 
 ## 1. Roll Phase:
 1. Download the [Script](https://github.com/Frittutisna/Picked-Crews/blob/main/Script.py)

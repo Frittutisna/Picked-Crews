@@ -7,7 +7,7 @@ from    openpyxl    import  load_workbook
 from    pathlib     import  Path
 
 # Configurations
-MODE_WEIGHTS    = {"Watched": 0.2, "Random": 0.2, "Spotlight": 0.2, "Any": 0.4}
+MODE_WEIGHTS    = {"Watched": 0.25, "Random": 0.25, "Spotlight": 0.25, "Any": 0.25}
 SPORTS_MODES    = ["MLB", "NBA", "NFL", "F1"]
 DEFAULT_MODES   = 50
 DEFAULT_SPORTS  = 0
@@ -96,6 +96,56 @@ def validate_setup(setup, rolled_map):
         if total_picked != setup["size"]:
             raise ValueError(f"Modes protected/picked by {team_label} total {total_picked} players, expected {setup['size']}")
 
+def generate_rolls(all_data, args):
+    '''Generates Rolls.txt based on weights and arguments'''
+    n                   = max(50, min(100, args.modes))
+    sport_pool          = [d for d in all_data if any(s in d["name"].upper() for s in SPORTS_MODES)]
+    max_sports          = len(sport_pool)
+    requested_sports    = max(0, min(max_sports, args.sports))
+    guarantee_per_count = 5 * ((n // 4) // 5)
+    selected            = []
+    
+    def get_selected_names(): return {d["name"] for d in selected}
+    selected.extend(random.sample(sport_pool, k = requested_sports))
+
+    for count in [1, 2, 3, 4]:
+        count_pool          = [d for d in all_data      if d["val_c"] == count or f"{count}v{count}" in d["name"]]
+        already_selected    = [d for d in selected      if d["val_c"] == count]
+        available           = [d for d in count_pool    if d["name"] not in get_selected_names()]
+        needed              = max(0, guarantee_per_count - len(already_selected))
+        if len(available) < needed  : picks = available
+        else                        : picks = random.sample(available, k=needed)
+        selected.extend(picks)
+
+    remaining_total = n - len(selected)    
+    if remaining_total > 0:
+        counts      = {k: int(remaining_total * w) for k, w in MODE_WEIGHTS.items()}
+        leftover    = remaining_total - sum(counts.values())
+        priority    = list(MODE_WEIGHTS.keys())
+        for i in range(leftover): counts[priority[i % len(priority)]] += 1
+
+        def fill_buckets(bucket_items, needed):
+            available   = [d for d in bucket_items if d["name"] not in get_selected_names()]
+            picks       = random.sample(available, k = min(len(available), needed))
+            selected.extend(picks)
+
+        buckets = {k: [d for d in all_data if k.lower() in d["name"].lower()] for k in MODE_WEIGHTS.keys() if k != "Any"}
+        
+        for key, needed in counts.items():
+            if key == "Any": continue
+            fill_buckets(buckets[key], needed)
+
+        final_needed = n - len(selected)
+        if final_needed > 0: fill_buckets([d for d in all_data if d["name"] not in get_selected_names()], final_needed)
+
+    random.shuffle(selected)
+    output_lines = [f"{i}. {item['name']} ({item['row']}, {item['val_c']})" for i, item in enumerate(selected, 1)]
+    output_text  = "Rolled Modes: \n" + "\n".join(output_lines)
+    
+    Path("Rolls.txt").write_text(output_text, encoding = "utf-8")
+    print(output_text)
+    print(f"[✓] Success: Generated Rolls.txt, copy-paste it in #tour-information")
+
 def generate_results(setup, rolled_list):
     '''Generates Results.txt based on Setup.txt and Rolls.txt'''
     rolled_map = {item["list_idx"]: item for item in rolled_list}
@@ -147,44 +197,6 @@ def generate_results(setup, rolled_list):
     Path("Results.txt").write_text(output, encoding = "utf-8")
     print(output)
     print("[✓] Success: Generated Results.txt, copy-paste it in #tour-information")
-
-def generate_rolls(all_data, args):
-    '''Generates Rolls.txt based on weights and arguments'''
-    counts      = {k: int(args.modes * w) for k, w in MODE_WEIGHTS.items()}
-    leftover    = args.modes - sum(counts.values())
-    priority    = list(MODE_WEIGHTS.keys())
-    for i in range(leftover): counts[priority[i % len(priority)]] += 1
-    
-    selected    = []
-    sport_pool  = [d for d in all_data if any(s in d["name"].upper() for s in SPORTS_MODES)]
-
-    if args.sports > len(sport_pool):
-        print(f"[!] Error: Requested {args.sports} Sports Modes, only {len(sport_pool)} exist")
-        sys.exit(1)
-
-    selected.extend(random.sample(sport_pool, k = args.sports))
-
-    def fill(bucket_items, needed):
-        current_names = [d["name"] for d in selected]
-        available     = [d for d in bucket_items if d["name"] not in current_names]
-        picks         = random.sample(available, k = min(len(available), needed))
-        selected.extend(picks)
-
-    buckets = {k: [d for d in all_data if k.lower() in d["name"].lower()] for k in MODE_WEIGHTS.keys() if k != "Any"}
-    for key, needed in counts.items():
-        if key == "Any": continue
-        already = sum(1 for d in selected if key.lower() in d["name"].lower())
-        fill(buckets[key], max(0, needed - already))
-
-    fill([d for d in all_data if d["name"] not in [x["name"] for x in selected]], args.modes - len(selected))
-
-    random.shuffle(selected)
-    output_lines = [f"{i}. {item['name']} ({item['row']}, {item['val_c']})" for i, item in enumerate(selected, 1)]
-    output_text  = "Rolled Modes: \n" + "\n".join(output_lines)
-    
-    Path("Rolls.txt").write_text(output_text, encoding = "utf-8")
-    print(output_text)
-    print(f"[✓] Success: Generated Rolls.txt, copy-paste it in #tour-information")
 
 def main():
     parser = argparse.ArgumentParser(description = "[?] Roll modes for Picked Crews")
