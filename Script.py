@@ -96,6 +96,12 @@ def validate_setup(setup, rolled_map):
         if total_picked != setup["size"]:
             raise ValueError(f"Modes protected/picked by {team_label} total {total_picked} players, expected {setup['size']}")
 
+def format_mode_name(name, val_c):
+    '''Appends nvn suffix if not already present in the name'''
+    suffix = f"{val_c}v{val_c}"
+    if suffix in name.lower(): return name
+    return f"{name} {suffix}"
+
 def generate_rolls(all_data, args):
     '''Generates Rolls.txt based on weights and arguments'''
     n                   = max(50, min(100, args.modes))
@@ -139,7 +145,7 @@ def generate_rolls(all_data, args):
         if final_needed > 0: fill_buckets([d for d in all_data if d["name"] not in get_selected_names()], final_needed)
 
     random.shuffle(selected)
-    output_lines = [f"{i}. {item['name']} ({item['row']}, {item['val_c']})" for i, item in enumerate(selected, 1)]
+    output_lines = [f"{i}. {format_mode_name(item['name'], item['val_c'])} ({item['row']}, {item['val_c']})" for i, item in enumerate(selected, 1)]
     output_text  = "Rolled Modes: \n" + "\n".join(output_lines)
     
     Path("Rolls.txt").write_text(output_text, encoding = "utf-8")
@@ -153,7 +159,8 @@ def generate_results(setup, rolled_list):
     
     def get_fmt(idx): 
         mode = rolled_map[idx]
-        return f"{mode['name']}:"
+        formatted_name = format_mode_name(mode['name'], mode['val_c'])
+        return f"{formatted_name}:"
 
     rounds = []
     for i in range(2):
@@ -184,7 +191,7 @@ def generate_results(setup, rolled_list):
             ordered_sample  = [w_pick, r_pick]
             remaining       = [d for d in sample if d not in ordered_sample]
             ordered_sample.extend(remaining)
-            round_3_final   = [f"{d['name']}:" for d in ordered_sample]
+            round_3_final   = [f"{format_mode_name(d['name'], d['val_c'])}:" for d in ordered_sample]
             break
 
         attempts += 1
