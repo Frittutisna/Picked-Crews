@@ -211,16 +211,18 @@ def generate_results(setup, rolled_list):
         
         watched_modes = [d for d in sample if "watched" in d["name"].lower()]
         random_modes  = [d for d in sample if "random"  in d["name"].lower()]
+        if current_p == setup["size"] and abs(len(watched_modes) - len(random_modes)) <= 1:
+            w_pick = watched_modes  [0] if watched_modes    else None
+            r_pick = random_modes   [0] if random_modes     else None
 
-        if current_p == setup["size"] and watched_modes and random_modes:
-            w_pick          = watched_modes [0]
-            r_pick          = random_modes  [0]
-            ordered_sample  = [w_pick, r_pick]
+            ordered_sample  = []
+            if w_pick       : ordered_sample.append(w_pick)
+            if r_pick       : ordered_sample.append(r_pick)
+            
             remaining       = [d for d in sample if d not in ordered_sample]
             ordered_sample.extend(remaining)
             round_3_final   = [f"{d['name']}:" for d in ordered_sample]
             break
-
         attempts += 1
     else: raise ValueError("Could not find a valid Round 3 combination matching constraints")
 
