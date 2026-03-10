@@ -106,26 +106,42 @@ def format_mode_name(name, val_c):
     if suffix in name.lower(): return name
     return f"{name} {suffix}"
 
+def get_core_name(name):
+    '''Strips Random/Watched/Mixed/Unwatched prefix and nvn suffix'''
+    core = re.sub(r'^(Random|Watched|Mixed|Unwatched)\s+',  '', name, flags = re.IGNORECASE)
+    core = re.sub(r'\s+(\d+v\d+|BR\s+\d+v\d+)$',            '', core, flags = re.IGNORECASE)
+    return core.strip()
+
 def generate_rolls(all_data, args):
-    '''Generates Rolls.txt based on weights and arguments'''
+    '''Generates Rolls.txt based on weights, arguments, and core mode constraints'''
     n                   = max(50, min(100, args.modes))
     sport_pool          = [d for d in all_data if any(s in d["name"].upper() for s in SPORTS_MODES)]
     max_sports          = len(sport_pool)
     requested_sports    = max(0, min(max_sports, args.sports))
     guarantee_per_count = 5 * ((n // 4) // 5)
     selected            = []
+    selected_cores      = set()
     
-    def get_selected_names(): return {d["name"] for d in selected}
-    selected.extend(random.sample(sport_pool, k = requested_sports))
+    def add_if_unique(item):
+        core = get_core_name(item["name"])
+        if core not in selected_cores:
+            selected.append(item)
+            selected_cores.add(core)
+            return True
+        return False
+
+    for item in random.sample(sport_pool, len(sport_pool)):
+        if len([s for s in selected if any(sp in s["name"].upper() for sp in SPORTS_MODES)]) >= requested_sports: break
+        add_if_unique(item)
 
     for count in [1, 2, 3, 4]:
-        count_pool          = [d for d in all_data      if d["val_c"] == count or f"{count}v{count}" in d["name"]]
-        already_selected    = [d for d in selected      if d["val_c"] == count]
-        available           = [d for d in count_pool    if d["name"] not in get_selected_names()]
-        needed              = max(0, guarantee_per_count - len(already_selected))
-        if len(available) < needed  : picks = available
-        else                        : picks = random.sample(available, k=needed)
-        selected.extend(picks)
+        count_pool  = [d for d in all_data if d["val_c"] == count or f"{count}v{count}" in d["name"]]
+        random.shuffle(count_pool)
+        needed      = max(0, guarantee_per_count - len([d for d in selected if d["val_c"] == count]))
+        added       = 0
+        for item in count_pool:
+            if added >= needed      : break
+            if add_if_unique(item)  : added += 1
 
     remaining_total = n - len(selected)    
     if remaining_total > 0:
@@ -133,20 +149,24 @@ def generate_rolls(all_data, args):
         leftover    = remaining_total - sum(counts.values())
         priority    = list(MODE_WEIGHTS.keys())
         for i in range(leftover): counts[priority[i % len(priority)]] += 1
-
-        def fill_buckets(bucket_items, needed):
-            available   = [d for d in bucket_items if d["name"] not in get_selected_names()]
-            picks       = random.sample(available, k = min(len(available), needed))
-            selected.extend(picks)
-
-        buckets = {k: [d for d in all_data if k.lower() in d["name"].lower()] for k in MODE_WEIGHTS.keys() if k != "Any"}
-        
+        buckets     = {k: [d for d in all_data if k.lower() in d["name"].lower()] for k in MODE_WEIGHTS.keys() if k != "Any"}
         for key, needed in counts.items():
             if key == "Any": continue
-            fill_buckets(buckets[key], needed)
+            pool    = buckets[key]
+            random.shuffle(pool)
+            added   = 0
+            for item in pool:
+                if added >= needed      : break
+                if add_if_unique(item)  : added += 1
 
         final_needed = n - len(selected)
-        if final_needed > 0: fill_buckets([d for d in all_data if d["name"] not in get_selected_names()], final_needed)
+        if final_needed > 0:
+            pool    = list(all_data)
+            random.shuffle(pool)
+            added   = 0
+            for item in pool:
+                if len(selected) >= n: break
+                add_if_unique(item)
 
     random.shuffle(selected)
     output_lines = [f"{i}. {format_mode_name(item['name'], item['val_c'])}" for i, item in enumerate(selected, 1)]
@@ -178,12 +198,16 @@ def generate_results(setup, rolled_list):
     while attempts < 1000:
         sample          = []
         current_p       = 0
+        spotlight_count = 0
         shuffled_pool   = random.sample(pool, len(pool))
         
         for item in shuffled_pool:
+            is_spotlight = "spotlight" in item["name"].lower()
             if current_p + item["val_c"] <= setup["size"]:
+                if is_spotlight and spotlight_count >= 1    : continue
                 sample.append(item)
                 current_p += item["val_c"]
+                if is_spotlight                             : spotlight_count += 1
         
         watched_modes = [d for d in sample if "watched" in d["name"].lower()]
         random_modes  = [d for d in sample if "random"  in d["name"].lower()]

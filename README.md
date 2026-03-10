@@ -1,4 +1,4 @@
-# Modes Picker v1.1.0 for Picked Crews
+# Modes Picker v1.1.1 for Picked Crews
 
 ## 1. Roll Phase:
 1. Download the [Script](https://github.com/Frittutisna/Picked-Crews/blob/main/Script.py)
@@ -27,3 +27,7 @@ Round 1 will be played using Team A's picks, while Round 2 uses Team B's picks a
     * `Picked` lists the IDs of picked modes, bracketed by picks from Team A and B respectively
 2. Open said folder in CMD/VSCode, then run the Script again without flags
 3. Find `Results.txt` and copy-paste it in `#tour-information`
+
+## Changelog:
+1. Introduced Core constraints to prevent duplicate variations
+2. Limited R3 to maximum of 1 Spotlight mode
