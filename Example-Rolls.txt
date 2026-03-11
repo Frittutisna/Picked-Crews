@@ -1,51 +1,51 @@
 Rolled Modes: 
-1. Unwatched 2v2
-2. Franchise Spotlight (Uma Musume) DNGMC 2v2
-3. Watched Playback Speed Twister DNGMC 3v3
-4. Watched Picked Years 4v4
-5. Community Spotlight (Card Games) 1v1
-6. Watched OPs 1v1
-7. Artist Spotlight (Nana Mizuki) DNGMC 3v3
-8. Random Highly Rated Shows DNGMC 4v4
-9. Franchise Spotlight (Bang Dream) DNGMC 3v3
-10. Random Novice S/A 1v1
-11. Random Low Rated Shows DNGMC 4v4
-12. Watched Trap Card 4v4
-13. Watched Grand Prix 4v4
-14. Random Highly Rated Shows 2v2
-15. Artist Spotlight (Kana Hanazawa) DNGMC 3v3
-16. Watched Hint Scoring 2v2
-17. Random Chanting DNGMC 3v3
-18. Watched S/A 2v2
-19. Watched New Game Mode 4v4
-20. Random Tag 3v3
-21. Franchise Spotlight (Yu-Gi-Oh!) 1v1
-22. Random EDINs Mastery 1v1
-23. Watched Movies Only 1v1
-24. Random Gotta Go Fast 1v1
-25. Watched NGMC 15s 4v4
-26. Artist Spotlight (Maon Kurosaki) 1v1
-27. Random Small 2019 Ranked DNGMC 4v4
-28. Crew Battle Duos 2v2
-29. Random OPEDs Mastery DNGMC 2v2
-30. Artist Spotlight (Masayoshi Ooishi) DNGMC 3v3
-31. Random OVAs, ONAs, & Specials Only 1v1
-32. Random Picked Seasons 2v2
-33. Random OPINs Mastery DNGMC 2v2
-34. Franchise Spotlight (Naruto) DNGMC 2v2
-35. Random Lives 3v3
-36. Watched Boss Fight Duos 2v2
-37. Watched 1 Team Switcheroo Trios 3v3
-38. Hybrid Equal 2v2
-39. Artist Spotlight (LiSA) DNGMC 3v3
-40. Watched 8s No Dropdown 1v1
-41. Random No TV 2v2
-42. Watched Playback Speed Twister 1v1
-43. Watched Genre DNGMC 3v3
-44. Watched Extremely Hard Only 3v3
-45. Active Global Player List BR 4v4
-46. Random Uma Musume Quads: Grand Prix 4v4
-47. Unwatched Medium 1v1
-48. Watched Start & End Samples 1v1
-49. Random MLB 4v4
-50. Watched 1980s 1v1
+1. Active Global Player List Grand Prix 3v3
+2. Artist Spotlight (Aimer) DNGMC 3v3
+3. Artist Spotlight (Eir Aoi) 1v1
+4. Artist Spotlight (KOKIA) 1v1
+5. Artist Spotlight (Maon Kurosaki) 1v1
+6. Artist Spotlight (Saori Hayami) 1v1
+7. Artist Spotlight (TRUE) DNGMC 2v2
+8. Community Spotlight (Classical Composers) 1v1
+9. Community Spotlight (Lyricsdrop) DNGMC 2v2
+10. Crew Battle Duos 2v2
+11. Franchise Spotlight (Brave Series) 1v1
+12. Franchise Spotlight (Naruto) DNGMC 2v2
+13. Mixed Modern Day 1v1
+14. Mixed Time Twister A 1v1
+15. Random 2000s 1v1
+16. Random Countdown 2v2
+17. Random Eurobeats DNGMC 3v3
+18. Random Fake 1st Ranked 1v1
+19. Random Gotta Go Fast 3v3
+20. Random Hermes 1v1
+21. Random Highly Rated Shows 2v2
+22. Random INs Mastery DNGMC 4v4
+23. Random Lives 4v4
+24. Random Low Rated Shows DNGMC 4v4
+25. Random Moderately Rated Shows 2v2
+26. Random NGMC 4v4
+27. Random Novice DNGMC 3v3
+28. Random OPEDINs Mastery DNGMC 3v3
+29. Random OPINs Mastery DNGMC 4v4
+30. Random OVAs, ONAs, & Specials Only 1v1
+31. Random Power of Alchemy 4v4
+32. Random Seasonals 1v1
+33. Random SnipaBR 2v2
+34. Random Zeus 4v4
+35. Snipaswap Duos 2v2
+36. Unwatched 3v3
+37. Watched EDs 1v1
+38. Watched Extremely Hard Only 2v2
+39. Watched Grand Prix 4v4
+40. Watched Hard Only 1v1
+41. Watched Hot Potato 3v3
+42. Watched Low Player Scores 1v1
+43. Watched NFL 4v4
+44. Watched OPEDINs 1v1
+45. Watched OPEDs 1v1
+46. Watched Picked Genre 3v3
+47. Watched Picked Seasons 4v4
+48. Watched Sonic Heroes 3v3
+49. Watched Start Sample EDs 2+8s 1v1
+50. Watched Tag 2v2
